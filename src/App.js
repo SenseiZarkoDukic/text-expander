@@ -1,14 +1,12 @@
 export default function App() {
   return (
     <div>
-      <TextExpander>
-        <Text>
-          Space travel is the ultimate adventure! Imagine soaring past the stars
-          and exploring new worlds. It's the stuff of dreams and science
-          fiction, but believe it or not, space travel is a real thing. Humans
-          and robots are constantly venturing out into the cosmos to uncover its
-          secrets and push the boundaries of what's possible.
-        </Text>
+      <TextExpander collapsedNumWords={10}>
+        Space travel is the ultimate adventure! Imagine soaring past the stars
+        and exploring new worlds. It's the stuff of dreams and science fiction,
+        but believe it or not, space travel is a real thing. Humans and robots
+        are constantly venturing out into the cosmos to uncover its secrets and
+        push the boundaries of what's possible.
       </TextExpander>
 
       <TextExpander
@@ -17,23 +15,18 @@ export default function App() {
         collapseButtonText="Collapse text"
         buttonColor="#ff6622"
       >
-        <Text>
-          Space travel requires some seriously amazing technology and
-          collaboration between countries, private companies, and international
-          space organizations. And while it's not always easy (or cheap), the
-          results are out of this world. Think about the first time humans
-          stepped foot on the moon or when rovers were sent to roam around on
-          Mars.
-        </Text>
+        Space travel requires some seriously amazing technology and
+        collaboration between countries, private companies, and international
+        space organizations. And while it's not always easy (or cheap), the
+        results are out of this world. Think about the first time humans stepped
+        foot on the moon or when rovers were sent to roam around on Mars.
       </TextExpander>
 
-      <TextExpander expanded={true} className="box">
-        <Text>
-          Space missions have given us incredible insights into our universe and
-          have inspired future generations to keep reaching for the stars. Space
-          travel is a pretty cool thing to think about. Who knows what we'll
-          discover next!
-        </Text>
+      <TextExpander collapsedNumWords={10} expanded={true} className="box">
+        Space missions have given us incredible insights into our universe and
+        have inspired future generations to keep reaching for the stars. Space
+        travel is a pretty cool thing to think about. Who knows what we'll
+        discover next!
       </TextExpander>
     </div>
   );
@@ -41,26 +34,28 @@ export default function App() {
 
 function TextExpander({
   collapsedNumWords,
-  expandButtonText,
-  collapseButtonText,
-  buttonColor,
-  expanded,
+  expandButtonText = "Show text",
+  collapseButtonText = "Collapse text",
+  buttonColor = "#ff6622",
+  expanded = true,
   className,
   children,
 }) {
   return (
     <div>
-      <Text collapsedNumWords={collapsedNumWords}>{children}</Text>
+      <Text
+        children={children}
+        collapsedNumWords={collapsedNumWords}
+        className={className}
+      />
     </div>
   );
 }
 
-function Text({ collapsedNumWords, children }) {
+function Text({ children, collapsedNumWords, className }) {
   return (
-    <>
-      {collapsedNumWords
-        ? children.length === children.length - collapsedNumWords
-        : ""}
-    </>
+    <div className={className}>
+      {children.split(" ", collapsedNumWords).join(" ")}
+    </div>
   );
 }
