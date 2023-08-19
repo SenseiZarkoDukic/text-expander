@@ -44,18 +44,36 @@ function TextExpander({
   return (
     <div>
       <Text
+        expanded={expanded}
         children={children}
         collapsedNumWords={collapsedNumWords}
         className={className}
+        expandButtonText={expandButtonText}
+        collapseButtonText={collapseButtonText}
+        buttonColor={buttonColor}
       />
     </div>
   );
 }
 
-function Text({ children, collapsedNumWords, className }) {
+function Text({
+  expanded,
+  expandButtonText,
+  collapseButtonText,
+  children,
+  collapsedNumWords,
+  className,
+}) {
   return (
-    <div className={className}>
-      {children.split(" ", collapsedNumWords).join(" ")}
-    </div>
+    <>
+      <div className={className}>
+        {children.split(" ", collapsedNumWords).join(" ")}
+      </div>
+      {expanded ? (
+        <p>{`...${collapseButtonText}`}</p>
+      ) : (
+        <p>{`...${expandButtonText}`} </p>
+      )}
+    </>
   );
 }
