@@ -48,8 +48,6 @@ function TextExpander({
         children={children}
         collapsedNumWords={collapsedNumWords}
         className={className}
-        expandButtonText={expandButtonText}
-        collapseButtonText={collapseButtonText}
         buttonColor={buttonColor}
       />
     </div>
@@ -68,12 +66,16 @@ function Text({
     <>
       <div className={className}>
         {children.split(" ", collapsedNumWords).join(" ")}
+        <Button
+          expandButtonText={expandButtonText}
+          collapseButtonText={collapseButtonText}
+          expanded={expanded}
+        />
       </div>
-      {expanded ? (
-        <p>{`...${collapseButtonText}`}</p>
-      ) : (
-        <p>{`...${expandButtonText}`} </p>
-      )}
     </>
   );
+}
+
+function Button({ expandButtonText, collapseButtonText, expanded }) {
+  return <>{expanded === true ? collapseButtonText : expandButtonText}</>;
 }
