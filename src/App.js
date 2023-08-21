@@ -1,7 +1,18 @@
+import { useState } from "react";
+
 export default function App() {
+  const [expanded, setExpanded] = useState(true);
+  const [expandButtonText, setExpandButtonText] = useState("Show more");
+  const [collapseButtonText, setCollapseButtonText] = useState("Show less");
+  const [collapsedNumWords, setCollapseNumWords] = useState(10);
+
   return (
     <div>
-      <TextExpander collapsedNumWords={10}>
+      <TextExpander
+        onSetExpanded={setExpanded}
+        onSetCollapseNumWords={setCollapseNumWords}
+        collapsedNumWords={10}
+      >
         Space travel is the ultimate adventure! Imagine soaring past the stars
         and exploring new worlds. It's the stuff of dreams and science fiction,
         but believe it or not, space travel is a real thing. Humans and robots
@@ -22,7 +33,7 @@ export default function App() {
         foot on the moon or when rovers were sent to roam around on Mars.
       </TextExpander>
 
-      <TextExpander collapsedNumWords={10} expanded={true} className="box">
+      <TextExpander expanded={true} className="box">
         Space missions have given us incredible insights into our universe and
         have inspired future generations to keep reaching for the stars. Space
         travel is a pretty cool thing to think about. Who knows what we'll
@@ -37,45 +48,58 @@ function TextExpander({
   expandButtonText = "Show text",
   collapseButtonText = "Collapse text",
   buttonColor = "#ff6622",
-  expanded = true,
+  expanded,
   className,
   children,
+  onSetExpanded,
+  onSetCollapseNumWords,
 }) {
   return (
-    <div>
-      <Text
+    <div className="className">
+      {children.split(" ", collapsedNumWords).join(" ")}{" "}
+      <Button
+        onSetExpanded={onSetExpanded}
         expanded={expanded}
-        children={children}
-        collapsedNumWords={collapsedNumWords}
-        className={className}
+        expandButtonText={expandButtonText}
+        collapseButtonText={collapseButtonText}
         buttonColor={buttonColor}
+        collapsedNumWords={collapsedNumWords}
+        onSetCollapseNumWords={onSetCollapseNumWords}
       />
     </div>
   );
 }
 
-function Text({
+function Button({
+  onSetExpanded,
   expanded,
   expandButtonText,
   collapseButtonText,
-  children,
+  buttonColor,
   collapsedNumWords,
-  className,
+  onSetCollapseNumWords,
 }) {
+  const handleExpand = (expanded) => {
+    onSetExpanded(!expanded);
+    onSetCollapseNumWords(!collapsedNumWords);
+  };
   return (
     <>
-      <div className={className}>
-        {children.split(" ", collapsedNumWords).join(" ")}
-        <Button
-          expandButtonText={expandButtonText}
-          collapseButtonText={collapseButtonText}
-          expanded={expanded}
-        />
-      </div>
+      {!collapsedNumWords || expanded ? (
+        <button
+          style={{
+            buttonColor: buttonColor,
+            backgroundColor: "#fff",
+            borderColor: "#fff",
+          }}
+        >
+          {collapseButtonText}
+        </button>
+      ) : (
+        <button style={{ buttonColor: buttonColor }} onClick={handleExpand}>
+          ...{expandButtonText}
+        </button>
+      )}
     </>
   );
-}
-
-function Button({ expandButtonText, collapseButtonText, expanded }) {
-  return <>{expanded === true ? collapseButtonText : expandButtonText}</>;
 }
