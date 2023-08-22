@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function App() {
   return (
     <div>
-      <TextExpander collapsedNumWords={10}>
+      <TextExpander collapsedNumWords={10} emoji="🚀">
         Space travel is the ultimate adventure! Imagine soaring past the stars
         and exploring new worlds. It's the stuff of dreams and science fiction,
         but believe it or not, space travel is a real thing. Humans and robots
@@ -16,6 +16,7 @@ export default function App() {
         expandButtonText="Show text"
         collapseButtonText="Collapse text"
         buttonColor="#ff6622"
+        emoji="🛰️"
       >
         Space travel requires some seriously amazing technology and
         collaboration between countries, private companies, and international
@@ -24,7 +25,7 @@ export default function App() {
         foot on the moon or when rovers were sent to roam around on Mars.
       </TextExpander>
 
-      <TextExpander expanded={true} className="box">
+      <TextExpander expanded={true} className="box" emoji="🌌">
         Space missions have given us incredible insights into our universe and
         have inspired future generations to keep reaching for the stars. Space
         travel is a pretty cool thing to think about. Who knows what we'll
@@ -37,23 +38,33 @@ export default function App() {
 function TextExpander({
   expandButtonText,
   collapseButtonText,
-  buttonColor = "#ff6622",
+  buttonColor,
   expanded,
   className,
   children,
   collapsedNumWords,
+  emoji,
 }) {
   const [exp, setExp] = useState(expanded);
   const [expButtonText, setExpButtonText] = useState("Show more");
   const [collButtonText, setCollButtonText] = useState("Show less");
-  const [collNumWords, setCollNumWords] = useState(10);
+  const [collNumWords, setCollNumWords] = useState(collapsedNumWords);
   const [btnColor, setBtnColor] = useState("#0000FF");
+  const [clName, setClName] = useState("");
 
   return (
-    <div className="className">
-      <Text collapsedNumWords={collNumWords} children={children} exp={exp} />{" "}
+    <div className={className ? className : clName}>
+      <Text
+        collNumWords={collNumWords}
+        children={children}
+        exp={exp}
+        className={className}
+        collapsedNumWords={collapsedNumWords}
+      />{" "}
       <Button
         onSetExp={setExp}
+        onSetExpBtnText={setExpButtonText}
+        onSetCollBtnText={setCollButtonText}
         exp={exp}
         expandButtonText={expandButtonText}
         collapseButtonText={collapseButtonText}
@@ -62,19 +73,33 @@ function TextExpander({
         onSetCollapseNumWords={setCollNumWords}
         collButtonText={collButtonText}
         expButtonText={expButtonText}
-        // btnColor={collapsedNumWords === 20 && setBtnColor(buttonColor)}
+        btnColor={btnColor}
+        onSetBtnColor={setBtnColor}
+        buttonColor={buttonColor}
       />
+      {emoji}
     </div>
   );
 }
 
-function Text({ collapsedNumWords, children, exp }) {
+function Text({ collNumWords, children, exp, className, collapsedNumWords }) {
   return (
-    <>{exp ? children : children.split(" ", collapsedNumWords).join(" ")}</>
+    <>
+      {exp
+        ? children
+        : children
+            .split(
+              " ",
+              !collapsedNumWords ? (collapsedNumWords = 10) : collNumWords
+            )
+            .join(" ")}
+    </>
   );
 }
 
 function Button({
+  onSetExpBtnText,
+  onSetCollBtnText,
   onSetExp,
   exp,
   expandButtonText,
@@ -84,29 +109,31 @@ function Button({
   onSetCollapseNumWords,
   collButtonText,
   expButtonText,
-  // btnColor,
+  btnColor,
+  onSetBtnColor,
 }) {
   const handleExpand = (exp) => onSetExp(!exp);
-  const handleCollapse = (exp) => onSetExp(exp);
+  const handleCollapse = (exp) => {
+    onSetExp(exp);
+  };
 
   const btnStyle = {
     background: "none",
     border: "none",
     padding: 0,
-    // buttonColor: btnColor,
+    color: collapsedNumWords === 20 ? buttonColor : btnColor,
+    fontSize: "16px",
   };
   return (
     <>
       {exp ? (
         <button style={btnStyle} onClick={() => handleCollapse()}>
-          {collButtonText}
+          {collapsedNumWords === 20 ? collapseButtonText : collButtonText}
         </button>
       ) : (
-        <button
-          style={{ buttonColor: buttonColor }}
-          onClick={() => handleExpand()}
-        >
-          ...{expButtonText}
+        <button style={btnStyle} onClick={() => handleExpand()}>
+          ...
+          {collapsedNumWords === 20 ? expandButtonText : expButtonText}
         </button>
       )}
     </>
