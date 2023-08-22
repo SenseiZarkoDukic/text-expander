@@ -25,7 +25,12 @@ export default function App() {
         foot on the moon or when rovers were sent to roam around on Mars.
       </TextExpander>
 
-      <TextExpander expanded={true} className="box" emoji="🌌">
+      <TextExpander
+        expanded={true}
+        className="box"
+        emoji="🌌"
+        collapsedNumWords={10}
+      >
         Space missions have given us incredible insights into our universe and
         have inspired future generations to keep reaching for the stars. Space
         travel is a pretty cool thing to think about. Who knows what we'll
@@ -61,40 +66,31 @@ function TextExpander({
         className={className}
         collapsedNumWords={collapsedNumWords}
       />{" "}
-      <Button
-        onSetExp={setExp}
-        onSetExpBtnText={setExpButtonText}
-        onSetCollBtnText={setCollButtonText}
-        exp={exp}
-        expandButtonText={expandButtonText}
-        collapseButtonText={collapseButtonText}
-        collapsedNumWords={collapsedNumWords}
-        collNumWords={collNumWords}
-        onSetCollapseNumWords={setCollNumWords}
-        collButtonText={collButtonText}
-        expButtonText={expButtonText}
-        btnColor={btnColor}
-        onSetBtnColor={setBtnColor}
-        buttonColor={buttonColor}
-      />
+      {collapsedNumWords && (
+        <Button
+          onSetExp={setExp}
+          onSetExpBtnText={setExpButtonText}
+          onSetCollBtnText={setCollButtonText}
+          exp={exp}
+          expandButtonText={expandButtonText}
+          collapseButtonText={collapseButtonText}
+          collapsedNumWords={collapsedNumWords}
+          collNumWords={collNumWords}
+          onSetCollapseNumWords={setCollNumWords}
+          collButtonText={collButtonText}
+          expButtonText={expButtonText}
+          btnColor={btnColor}
+          onSetBtnColor={setBtnColor}
+          buttonColor={buttonColor}
+        />
+      )}
       {emoji}
     </div>
   );
 }
 
 function Text({ collNumWords, children, exp, className, collapsedNumWords }) {
-  return (
-    <>
-      {exp
-        ? children
-        : children
-            .split(
-              " ",
-              !collapsedNumWords ? (collapsedNumWords = 10) : collNumWords
-            )
-            .join(" ")}
-    </>
-  );
+  return <>{exp ? children : children.split(" ", collNumWords).join(" ")}</>;
 }
 
 function Button({
