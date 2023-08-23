@@ -34,6 +34,35 @@ export default function App() {
   );
 }
 
-function TextExpander() {
-  return <div>TODO</div>;
+function TextExpander({
+  collapsedNumWords = 10,
+  expandButtonText = "Show more",
+  collapseButtonText = "Show less",
+  buttonColor = "#1e90ff ",
+  expanded = false,
+  className,
+  children,
+}) {
+  const [isExpanded, setIsExpanded] = useState(expanded);
+
+  const btnStyle = {
+    color: buttonColor,
+    font: "inherit",
+    cursor: "pointer",
+    border: "none",
+    background: "none",
+    marginLeft: "6px",
+  };
+  return (
+    <div className={className}>
+      <span>
+        {isExpanded
+          ? children
+          : children.split(" ", collapsedNumWords).join(" ") + "..."}
+      </span>{" "}
+      <button onClick={() => setIsExpanded(!isExpanded)} style={btnStyle}>
+        {isExpanded ? collapseButtonText : expandButtonText}
+      </button>
+    </div>
+  );
 }
